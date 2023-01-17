@@ -23,6 +23,8 @@ services:
   auth_api:
     build: auth_api
     image: flask_app
+    volumes:
+      - static_volume:/opt/auth_api/src/static
     env_file:
       - ./auth_api/.env
     depends_on:
@@ -35,8 +37,7 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/configs:/etc/nginx/conf.d:ro
       - ./data:/data/:ro
-      - static_volume:/opt/app/static
-      - media_volume:/opt/app/media
+      - static_volume:/static
     depends_on:
       - auth_api
     ports:

@@ -16,12 +16,11 @@ class DbSettings(BaseSettings):
     host: str = Field('db', env='DB_HOST')
     port: int = Field(5432, env='DB_PORT')
 
-class ProjectSettings(BaseSettings):
-    PROJECT_NAME = Field('movies', env='PROJECT_NAME')
+class RedisSettings(BaseSettings):
     # Настройки Redis
     REDIS_HOST = Field('127.0.0.1', env='REDIS_HOST')
     REDIS_PORT = Field(6379, env='REDIS_PORT')
-    # Настройки Elasticsearch
     CACHE_EXPIRE_IN_SECONDS = Field(300, env='CACHE_EXPIRE_IN_SECONDS')
-    BASE_DIR = Field(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+db_settings = DbSettings()
+redis_settings = RedisSettings()
