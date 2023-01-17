@@ -3,7 +3,7 @@ import base64
 import pytest
 from flask_sqlalchemy import SQLAlchemy
 
-from app import create_app
+from auth_api.src.app import create_app
 from testdata.models import User, LoginHistory, Roles, UsersRoles
 from utils.settings import TEST_SETTINGS
 
@@ -12,9 +12,8 @@ db = SQLAlchemy()
 
 @pytest.fixture()
 def app():
-    # other setup can go her
-    app = create_app()
 
+    app = create_app()
     app.config.update({
         'SQLALCHEMY_DATABASE_URI' : f'postgresql://{TEST_SETTINGS.posgres_name}:{TEST_SETTINGS.posgres_password}@{TEST_SETTINGS.db_url}/{TEST_SETTINGS.posgres_name}'})
     app.config.update({
