@@ -9,14 +9,13 @@ from settings import TEST_SETTINGS
 
 logger = logging.getLogger("tests")
 
+
 def backoff_handler(details):
     logger.info("Redis is unavailable - sleeping")
 
+
 @backoff.on_exception(
-    backoff.expo,
-    (ConnectionError,),
-    on_backoff=backoff_handler,
-    max_time=60,
+    backoff.expo, (ConnectionError,), on_backoff=backoff_handler, max_time=60,
 )
 async def wait_for_redis():
     redis_client = await aioredis.create_redis_pool(
