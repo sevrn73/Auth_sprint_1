@@ -9,7 +9,7 @@ services:
     ports:
       - 5432:5432
     env_file:
-      - ./app/example/.env
+      - ./auth_api/.env
     environment:
       PGDATA: "/var/lib/postgresql/data/pgdata"
       POSTGRES_HOST_AUTH_METHOD: "trust"
@@ -21,10 +21,10 @@ services:
       - 6379:6379
 
   auth_api:
-    build: app
+    build: auth_api
     image: flask_app
     env_file:
-      - ./app/.env
+      - ./auth_api/.env
     depends_on:
       - db
       - redis
@@ -44,4 +44,6 @@ services:
 
 volumes:
   postgres_volume:
+  static_volume:
+  media_volume:
 

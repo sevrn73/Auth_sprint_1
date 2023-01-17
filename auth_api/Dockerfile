@@ -1,7 +1,7 @@
 FROM python:3.8
 
 
-WORKDIR /opt/fastapi
+WORKDIR /opt/auth_api
 
 COPY .env .env
 COPY requirements.txt requirements.txt
@@ -13,5 +13,4 @@ COPY . .
 
 EXPOSE 8001
 
-ENTRYPOINT ["python", "/opt/fastapi/src/wait_for_db.py"]
-
+ENTRYPOINT ["python", "/opt/auth_api/src/wait_for_db.py"]
