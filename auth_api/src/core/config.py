@@ -1,4 +1,4 @@
-import os
+from datetime import timedelta
 from logging import config as logging_config
 
 from core.logger import LOGGING
@@ -9,6 +9,10 @@ from pydantic import BaseSettings, Field
 logging_config.dictConfig(LOGGING)
 
 
+class ProjectSettings(BaseSettings):
+    SECRET_KEY = Field('key', env='SECRET_KEY')
+
+
 class DbSettings(BaseSettings):
     dbname: str = Field('', env='POSTGRES_NAME')
     user: str = Field('', env='POSTGRES_USER')
@@ -16,11 +20,15 @@ class DbSettings(BaseSettings):
     host: str = Field('db', env='DB_HOST')
     port: int = Field(5432, env='DB_PORT')
 
+
 class RedisSettings(BaseSettings):
     # Настройки Redis
     REDIS_HOST = Field('127.0.0.1', env='REDIS_HOST')
     REDIS_PORT = Field(6379, env='REDIS_PORT')
-    CACHE_EXPIRE_IN_SECONDS = Field(300, env='CACHE_EXPIRE_IN_SECONDS')
+    ACCESS_EXPIRES_IN_SECONDS = Field(timedelta(hours=1).seconds, env='ACCESS_EXPIRES_IN_SECONDS')
+    REFRESH_EXPIRES_IN_SECONDS = Field(timedelta(days=90).seconds, env='REFRESH_EXPIRES_IN_SECONDS')
 
+
+project_settings = ProjectSettings()
 db_settings = DbSettings()
 redis_settings = RedisSettings()

@@ -24,7 +24,7 @@ components:
     LoginHistory:
       type: object
       properties:
-        user:
+        user_agent:
           type: string
         auth_date:
           type: string
@@ -52,6 +52,8 @@ paths:
                 type: array
                 items:
                   type: string
+        '401':
+          description: Could not verify
       security:
         - BaseAuth: []
   /change_login:
@@ -93,7 +95,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Token'
+                type: array
+                items:
+                  type: string
         '400':
           description: Could not change password
   /login_history:
@@ -108,8 +112,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LoginHistory'
-        '401':
-          description: Couldnot verify
   /logout:
     delete:
       tags:
@@ -118,8 +120,6 @@ paths:
       responses:
         '200':
           description: revoke access/refresh token
-        '401':
-          description: Could not verify token
   /refresh:
     get:
       tags:
@@ -157,6 +157,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Token'
+        '400':
+          description: Login already existed
         '401':
           description: Login and password required
   /create_role:
@@ -270,7 +272,7 @@ paths:
           description: Role or login is empty
         '500':
           description: Could not assign role to user
-  /users_roles:
+  /user_roles:
     get:
       tags:
         - Managing User's roles
