@@ -1,11 +1,10 @@
 import uuid
 from datetime import datetime
 from typing import List
-
-from db.db import db
 from werkzeug.security import generate_password_hash
 
-from db.db_models import User, LoginHistory
+from src.db.db import db
+from src.db.db_models import User, LoginHistory
 
 
 def get_user_by_login(login: str) -> User:

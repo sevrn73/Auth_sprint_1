@@ -1,12 +1,8 @@
 from http import HTTPStatus
 from flask import jsonify, request, make_response
 
-from db.roles_service import (
-    create_role_db,
-    delete_role_db,
-    change_role_db,
-)
-from core.jwt_decorators import jwt_admin_or_manager_required
+from src.db.roles_service import create_role_db, delete_role_db, change_role_db, get_all_roles, get_role_by_name
+from src.core.jwt_decorators import jwt_admin_or_manager_required
 
 
 @jwt_admin_or_manager_required()
@@ -24,7 +20,7 @@ def delete_role():
     role = request.values.get('role', None)
     if not role:
         return make_response('Role is empty', HTTPStatus.UNAUTHORIZED)
-    db_role = Roles.query.filter_by(name=role).first()
+    db_role = get_role_by_name(role)
     if not db_role:
         return make_response('Role does not exist', HTTPStatus.CONFLICT)
     delete_role_db(db_role)
@@ -44,6 +40,6 @@ def change_role():
 
 @jwt_admin_or_manager_required()
 def roles_list():
-    roles = Roles.query.all()
+    roles = get_all_roles()
     output = [role.name for role in roles]
     return jsonify(roles=output)

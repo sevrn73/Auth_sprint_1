@@ -2,11 +2,11 @@ import time
 import subprocess
 import logging
 from logging import config as logging_config
-from core.logger import LOGGING
+from src.core.logger import LOGGING
 from contextlib import closing
 import psycopg2
 from psycopg2.extras import DictCursor
-from core.config import DbSettings
+from src.core.config import DbSettings
 
 # Применяем настройки логирования
 logging_config.dictConfig(LOGGING)
@@ -29,7 +29,7 @@ def connect_and_start(ps_connect: dict):
 
     logger.info('Database available!')
 
-    subprocess.run(['python', '/opt/auth_api/src/pywsgi.py'])
+    subprocess.run(['python', '/opt/auth_api/pywsgi.py'])
 
 
 if __name__ == '__main__':

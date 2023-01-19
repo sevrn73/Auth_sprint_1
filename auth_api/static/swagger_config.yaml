@@ -195,7 +195,7 @@ paths:
           description: Role was deleted
         '409':
           description: Role doesnt exist in database
-  /rename_role:
+  /change_role:
     put:
       tags:
         - CRUD Roles

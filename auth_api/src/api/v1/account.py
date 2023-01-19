@@ -7,7 +7,7 @@ from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from werkzeug.security import check_password_hash
 
-from db.account_service import (
+from src.db.account_service import (
     get_user_by_login,
     add_record_to_login_history,
     get_user_by_identity,
@@ -16,8 +16,8 @@ from db.account_service import (
     create_user,
     get_login_hystory,
 )
-from core.config import redis_settings
-from cache.redis_cache import redis_cache
+from src.core.config import redis_settings
+from src.cache.redis_cache import redis_cache
 
 
 def login():

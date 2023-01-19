@@ -1,9 +1,16 @@
 import uuid
 from typing import List
 
-from db.db import db
+from src.db.db import db
+from src.db.db_models import Roles, UsersRoles
 
-from db.db_models import Roles, UsersRoles
+
+def get_all_roles() -> List[Roles]:
+    return Roles.query.all()
+
+
+def get_role_by_name(role: str) -> Roles:
+    return Roles.query.filter_by(name=role).first()
 
 
 def create_role_db(role_name: str) -> Roles:

@@ -1,10 +1,13 @@
 from gevent import monkey
+
 monkey.patch_all()
 
 from gevent.pywsgi import WSGIServer
 from app import start_app
 import sys, os
-sys.path.append(os.path.dirname(__file__) + '/..')
+
+# sys.path.append(os.path.dirname(__file__) + '/..')
+sys.path.insert(0, '/..')
 
 app = start_app()
 

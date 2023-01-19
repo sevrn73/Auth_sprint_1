@@ -1,14 +1,19 @@
 from datetime import timedelta
+import click
 from flask import Flask
 from flask import send_from_directory
 from flask_jwt_extended import JWTManager
 from flask_swagger_ui import get_swaggerui_blueprint
 
-from db.db import init_db, db
-from api.v1.api_v1_blueprint import app_v1_blueprint
-from core.config import project_settings, redis_settings
-from cache.redis_cache import redis_cache
-from db.roles_service import get_user_primary_role
+from src.db.db import init_db, db
+from src.api.v1.api_v1_blueprint import app_v1_blueprint
+from src.core.config import project_settings, redis_settings
+from src.cache.redis_cache import redis_cache
+from src.db.roles_service import get_user_primary_role
+from src.db.account_service import get_user_by_login, create_user
+from src.db.roles_service import get_role_by_name, create_role_db
+from src.db.managing_service import assign_role_to_user
+
 
 SWAGGER_URL = '/docs/'
 API_URL = '/static/swagger_config.yaml'
@@ -38,6 +43,20 @@ def create_app():
 
     app.register_blueprint(swagger_blueprint)
     app.register_blueprint(app_v1_blueprint, url_prefix='/v1')
+
+    @app.cli.command()
+    @click.argument('login', envvar='SUPERUSER_LOGIN')
+    @click.argument('password', envvar='SUPERUSER_PASS')
+    def create_admin_role(login, password):
+        admin_user = get_user_by_login(login)
+        if not admin_user:
+            admin_user = create_user(login, password)
+
+        admin_role = get_role_by_name('admin')
+        if not admin_role:
+            admin_role = create_role_db('admin')
+
+        assign_role_to_user(admin_user, admin_role)
 
     @app.route('/static/<path:path>')
     def send_static(path):

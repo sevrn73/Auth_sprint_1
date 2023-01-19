@@ -1,7 +1,7 @@
 from typing import List
 
-from db.db import db
-from db.db_models import User, Roles, UsersRoles
+from src.db.db import db
+from src.db.db_models import User, Roles, UsersRoles
 
 
 def get_roles_by_user(login: str) -> List[Roles]:
