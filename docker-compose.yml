@@ -24,7 +24,7 @@ services:
     build: auth_api
     image: flask_app
     volumes:
-      - static_volume:/opt/auth_api/src/static
+      - static_volume:/opt/auth_api/static
     env_file:
       - ./auth_api/.env
     depends_on:

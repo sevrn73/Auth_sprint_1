@@ -8,12 +8,12 @@ from src.db.managing_service import (
 )
 from src.db.roles_service import get_role_by_name
 from src.db.account_service import get_user_by_login
-from src.core.jwt_decorators import jwt_admin_required
+from src.core.jwt_decorators import jwt_admin_or_manager_required
 
 
-@jwt_admin_required()
+@jwt_admin_or_manager_required()
 def user_roles():
-    login = request.json.get('login', None)
+    login = request.values.get('login', None)
     if not login:
         return make_response('Login is empty', HTTPStatus.UNAUTHORIZED)
     users_roles = get_roles_by_user(login)
@@ -21,10 +21,10 @@ def user_roles():
     return jsonify(roles=output)
 
 
-@jwt_admin_required()
+@jwt_admin_or_manager_required()
 def assign_role():
-    login = request.json.get('login', None)
-    role = request.json.get('role', None)
+    login = request.values.get('login', None)
+    role = request.values.get('role', None)
     if not role or not login:
         return make_response('Role or login is empty', HTTPStatus.UNAUTHORIZED)
     db_role = get_role_by_name(role)
@@ -37,10 +37,10 @@ def assign_role():
     return jsonify(msg=f'Role {role} was assigned to user {login}')
 
 
-@jwt_admin_required()
+@jwt_admin_or_manager_required()
 def detach_role():
-    login = request.json.get('login', None)
-    role = request.json.get('role', None)
+    login = request.values.get('login', None)
+    role = request.values.get('role', None)
     if not role or not login:
         return make_response('Role or login is empty', HTTPStatus.UNAUTHORIZED)
     db_role = get_role_by_name(role)

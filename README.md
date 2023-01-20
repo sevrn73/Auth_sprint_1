@@ -12,11 +12,8 @@ docker-compose up
 
 - Все миграции пройдут автоматически
 
-docker-compose exec auth_service sh
-
-flask --app app.py admin create_admin_role
-flask --app app.py create_admin_role
-flask --app app.py routes
+docker-compose exec auth_api bash
+python3 -m flask create_admin_role
 
 ## Доступные сервисы
 

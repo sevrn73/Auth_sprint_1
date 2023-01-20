@@ -84,7 +84,7 @@ def login_history():
     identity = get_jwt_identity()
 
     history = [{'user_agent': _.user_agent, 'auth_date': _.auth_date} for _ in get_login_hystory(identity)]
-    return jsonify(login_history=history, token=get_jwt())
+    return jsonify(login_history=history)
 
 
 @jwt_required(verify_type=False)

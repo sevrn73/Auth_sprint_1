@@ -11,7 +11,7 @@ def jwt_admin_required():
         def decorator(*args, **kwargs):
             verify_jwt_in_request()
             token = get_jwt()
-            if token['role'] == 'admin':
+            if any(item in token['roles'] for item in ['admin']):
                 return fn(*args, **kwargs)
             else:
                 return make_response('Only administrators are allowed access', HTTPStatus.METHOD_NOT_ALLOWED)
@@ -27,7 +27,7 @@ def jwt_admin_or_manager_required():
         def decorator(*args, **kwargs):
             verify_jwt_in_request()
             token = get_jwt()
-            if token['role'] in ['admin', 'manager']:
+            if any(item in token['roles'] for item in ['admin', 'manager']):
                 return fn(*args, **kwargs)
             else:
                 return make_response(

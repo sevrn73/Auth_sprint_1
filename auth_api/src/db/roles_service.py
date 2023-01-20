@@ -13,23 +13,21 @@ def get_role_by_name(role: str) -> Roles:
     return Roles.query.filter_by(name=role).first()
 
 
-def create_role_db(role_name: str) -> Roles:
+def create_role_db(role_name: str) -> None:
     new_role = Roles(name=role_name)
     db.session.add(new_role)
     db.session.commit()
-
-    return new_role
 
 
 def get_user_primary_role(user_id: uuid) -> Roles:
     users_roles = UsersRoles.query.filter_by(user_id=user_id).all()
     if not users_roles:
-        return []
+        return {'roles': []}
     output = []
     for role in users_roles:
         role = Roles.query.filter_by(id=role.role_id).first()
-        output.append(role)
-    return output
+        output.append(role.name)
+    return {'roles': output}
 
 
 def delete_role_db(role: Roles) -> None:
