@@ -52,7 +52,7 @@ services:
     # image: auth_api
     # network_mode: "host"
     env_file:
-      - ./tests/functional/.env
+      - ./auth_api/.env
     entrypoint: >
       sh -c "python3 src/tests/functional/utils/sleep.py"
     # entrypoint: >
