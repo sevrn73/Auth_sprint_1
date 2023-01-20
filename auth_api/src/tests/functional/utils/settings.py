@@ -13,7 +13,7 @@ class TestSettings(BaseSettings):
     posgres_password: str = Field("postgres", env="POSTGRES_PASSWORD")
     db_host: str = Field("db", env="DB_HOST")
     db_port: str = Field("5432", env="DB_PORT")
-    db_url: str = Field("db:5432", env="DB_URL")
+    db_url: str = Field("http://127.0.0.1:5432")#, env="DB_URL")
 
 
 TEST_SETTINGS = TestSettings()
