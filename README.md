@@ -23,6 +23,12 @@ docker-compose exec auth_api bash
 python3 -m flask create_admin_role yourLogin yourPassword
 ```
 
+3. Запускаем тесты
+
+```
+docker-compose exec auth_api pytest
+```
+
 ## Доступные сервисы
 
 - [OpenAPI](http://localhost/docs/)
