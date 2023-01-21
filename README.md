@@ -21,6 +21,8 @@ docker-compose up
 docker-compose exec auth_api bash
 
 python3 -m flask create_admin_role yourLogin yourPassword
+
+python3 -m flask create_admin_role admin 1234 - для тестов
 ```
 
 3. Запускаем тесты

@@ -62,7 +62,7 @@ def test_refresh(refresh_headers):
     assert response.status_code == HTTPStatus.OK
 
 
-def test_singup():
+def test_sing_up():
     """
     Тестирование регистрации
     """
