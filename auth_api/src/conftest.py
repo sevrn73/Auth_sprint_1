@@ -16,8 +16,13 @@ TEST_LOGIN = 'test_login'
 TEST_PASSWORD = 'test_password'
 TEST_LOGIN_NEW = 'test_login1'
 TEST_PASSWORD_NEW = 'test_password2'
+ROLE_NAME = "test_role"
+ROLE_NAME_NEW = "test_role_new"
 
-@pytest.fixture(scope="function")
+MANAGING_LOGIN = "tt_login"
+MANAGING_ROLE = "tt_role"
+
+@pytest.fixture()
 def user():
     response = requests.post(
         f'{os.environ.get("SERVICE_URL", "http://nginx:80")}/v1/sign_up',
@@ -25,7 +30,16 @@ def user():
     )
     return response
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="module")
+def role(admin_headers):
+    response = requests.post(
+        f'{os.environ.get("SERVICE_URL", "http://nginx:80")}/v1/create_role',
+        data={"new_role": MANAGING_ROLE},
+        headers=admin_headers,
+    )
+    return response
+
+@pytest.fixture()
 def token_response():
     my_str = ":".join((TEST_LOGIN, TEST_PASSWORD)).encode("utf-8")
     credentials = base64.b64encode(my_str).decode("utf-8")
@@ -33,7 +47,7 @@ def token_response():
         f'{os.environ.get("SERVICE_URL", "http://nginx:80")}/v1/login', headers={"Authorization": "Basic " + credentials})
     return response
 
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def access_headers(token_response):
     access_token = token_response.json().get('access_token')
     headers = {
@@ -41,18 +55,10 @@ def access_headers(token_response):
     }
     return headers
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="module")
 def admin_headers():
     admin_login = os.environ.get("SUPERUSER_LOGIN", 'admin')
     admin_pass = os.environ.get("SUPERUSER_PASS", '1234')
-    response = requests.post(
-        f'{os.environ.get("SERVICE_URL", "http://nginx:80")}/v1/login',
-        data={'login': admin_login, 'password': admin_pass},
-    )
-    # response = requests.post(
-    #     f'{os.environ.get("SERVICE_URL", "http://nginx:80")}/v1/sign_up',
-    #     data={'login': admin_login, 'password': admin_pass},
-    # )
     my_str = ":".join((admin_login, admin_pass)).encode("utf-8")
     credentials = base64.b64encode(my_str).decode("utf-8")
     response = requests.post(
@@ -64,7 +70,7 @@ def admin_headers():
     return headers
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def refresh_headers(token_response):
     refresh_token = token_response.json().get('refresh_token')
     headers = {
@@ -72,7 +78,7 @@ def refresh_headers(token_response):
     }
     return headers
 
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def not_access_headers():
     login = "not_user"
     password = "not_password"
@@ -80,34 +86,6 @@ def not_access_headers():
     credentials = base64.b64encode(my_str).decode("utf-8")
     access_token = credentials
     headers = {"Authorization": "Bearer " + access_token}
-    return headers
-
-@pytest.fixture(scope="function")
-def token_response_new():
-    response = requests.post(
-        f'{os.environ.get("SERVICE_URL", "http://nginx:80")}/v1/sign_up',
-        data={'login': TEST_LOGIN_NEW, 'password': TEST_PASSWORD_NEW},
-    )
-    my_str = ":".join((TEST_LOGIN_NEW, TEST_PASSWORD_NEW)).encode("utf-8")
-    credentials = base64.b64encode(my_str).decode("utf-8")
-    response = requests.post(
-        f'{os.environ.get("SERVICE_URL", "http://nginx:80")}/v1/login', headers={"Authorization": "Basic " + credentials})
-    return response
-
-@pytest.fixture(scope="function")
-def access_headers_new(token_response_new):
-    access_token = token_response_new.json().get('access_token')
-    headers = {
-        'Authorization': 'Bearer ' + access_token
-    }
-    return headers
-
-@pytest.fixture(scope="function")
-def refresh_headers_new(token_response_new):
-    refresh_token = token_response_new.json().get('refresh_token')
-    headers = {
-        'Authorization': 'Bearer ' + refresh_token
-    }
     return headers
 
 def token_response_func(login, password):

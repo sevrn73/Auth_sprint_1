@@ -4,21 +4,20 @@ from http import HTTPStatus
 from requests.auth import HTTPBasicAuth
 from dotenv import load_dotenv
 
-from src.conftest import access_headers_func
+from src.conftest import access_headers_func, ROLE_NAME, ROLE_NAME_NEW
 
 load_dotenv()
 
 
 
-ROLE_NAME = "test_role"
-ROLE_NAME_NEW = "test_role_new"
+
 
 
 def test_create_role(admin_headers):
     """
     Тестирование создания роли
     """
-    # header = access_headers_func("changed_login", "changed_password")
+
     response = requests.post(
         f'{os.environ.get("SERVICE_URL", "http://nginx:80")}/v1/create_role',
         data={"new_role": ROLE_NAME},
@@ -42,7 +41,7 @@ def test_change_role(admin_headers):
     """
     Тестирование изменение роли
     """
-    # header = access_headers_func("changed_login", "changed_password")
+
     response = requests.put(
         f'{os.environ.get("SERVICE_URL", "http://nginx:80")}/v1/change_role',
         data={"role": ROLE_NAME, "new_name": ROLE_NAME_NEW},
@@ -55,7 +54,7 @@ def test_roles_list(admin_headers):
     """
     Тестирование вывода списка ролей
     """
-    # header = access_headers_func("changed_login", "changed_password")
+
     response = requests.get(f'{os.environ.get("SERVICE_URL", "http://nginx:80")}/v1/roles_list', headers=admin_headers)
     assert response.status_code == HTTPStatus.OK
 
@@ -64,7 +63,6 @@ def test_delete_role(admin_headers):
     """
     Тестирование удаления роли
     """
-    # header = access_headers_func("changed_login", "changed_password")
     response = requests.delete(
         f'{os.environ.get("SERVICE_URL", "http://nginx:80")}/v1/delete_role',
         data={"role": ROLE_NAME},
