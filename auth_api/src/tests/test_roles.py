@@ -1,16 +1,12 @@
 import os
 import requests
 from http import HTTPStatus
-from requests.auth import HTTPBasicAuth
+
 from dotenv import load_dotenv
 
-from src.conftest import access_headers_func, ROLE_NAME, ROLE_NAME_NEW
+from src.conftest import ROLE_NAME, ROLE_NAME_NEW
 
 load_dotenv()
-
-
-
-
 
 
 def test_create_role(admin_headers):
@@ -32,7 +28,9 @@ def test_create_role(admin_headers):
     )
     assert response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
     response = requests.post(
-        f'{os.environ.get("SERVICE_URL", "http://nginx:80")}/v1/create_role', data={"new_role": ""}, headers=admin_headers
+        f'{os.environ.get("SERVICE_URL", "http://nginx:80")}/v1/create_role',
+        data={"new_role": ""},
+        headers=admin_headers,
     )
     assert response.status_code == HTTPStatus.UNAUTHORIZED
 
