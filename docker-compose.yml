@@ -45,37 +45,6 @@ services:
     ports:
       - "80:80"
 
-  tests:
-    build:
-      context: auth_api/
-      dockerfile: DockerfileTests
-    # image: auth_api
-    # network_mode: "host"
-    env_file:
-      - ./auth_api/.env
-    entrypoint: >
-      sh -c "python3 src/tests/functional/utils/sleep.py"
-    # entrypoint: >
-    #   sh -c "python3 utils/wait_for_redis.py
-    #   && pytest src"
-    depends_on:
-      - auth_api
-
-  # tests:
-  #   build: tests/functional
-  #   env_file:
-  #     - ./tests/functional/.env
-  #   entrypoint: >
-  #     sh -c "python3 utils/wait_for_redis.py
-  #     && pytest src"
-  #   depends_on:
-  #     - auth_api
-
-
-    # entrypoint: >
-    #   sh -c "python3 utils/wait_for_api.py
-    #   && python3 utils/wait_for_redis.py
-    #   && pytest src"
 volumes:
   postgres_volume:
   static_volume:
