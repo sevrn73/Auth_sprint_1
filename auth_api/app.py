@@ -4,7 +4,7 @@ from flask import send_from_directory
 from flask_jwt_extended import JWTManager
 from flask_swagger_ui import get_swaggerui_blueprint
 
-from src.db.db import init_db, db
+from src.db.db import init_db
 from src.api.v1.api_v1_blueprint import app_v1_blueprint
 from src.core.config import project_settings, redis_settings
 from src.cache.redis_cache import redis_cache
@@ -52,7 +52,6 @@ def start_app():
     app = create_app()
     init_db(app)
     app.app_context().push()
-    db.create_all()
     return app
 
 
