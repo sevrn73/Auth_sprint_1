@@ -45,5 +45,9 @@ def change_password_in_db(user: User, new_password: str) -> None:
     db.session.commit()
 
 
-def get_login_hystory(identity: uuid) -> List:
-    return LoginHistory.query.filter_by(user_id=identity).order_by(LoginHistory.auth_date.desc()).limit(10)
+def get_login_hystory(identity: uuid, page: int, per_page: int) -> List:
+    return (
+        LoginHistory.query.filter_by(user_id=identity)
+        .order_by(LoginHistory.auth_date.desc())
+        .paginate(page=page, per_page=per_page)
+    )

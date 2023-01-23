@@ -20,19 +20,21 @@ from src.core.config import redis_settings
 from src.cache.redis_cache import redis_cache
 
 
+def get_unauthorized_response():
+    return make_response(
+        'Could not verify', HTTPStatus.UNAUTHORIZED, {'WWW-Authenticate': 'Basic realm="Login required!"'}
+    )
+
+
 def login():
     auth = request.authorization
 
     if not auth.username or not auth.password:
-        return make_response(
-            'Could not verify', HTTPStatus.UNAUTHORIZED, {'WWW-Authenticate': 'Basic realm="Login required!"'}
-        )
+        return get_unauthorized_response()
 
     user_model = get_user_by_login(auth.username)
     if not user_model:
-        return make_response(
-            'Could not verify', HTTPStatus.UNAUTHORIZED, {'WWW-Authenticate': 'Basic realm="Login required!"'}
-        )
+        return get_unauthorized_response()
 
     if check_password_hash(user_model.password, auth.password):
         user_agent = request.headers['user_agent']
@@ -47,9 +49,7 @@ def login():
 
         return jsonify(access_token=access_token, refresh_token=refresh_token)
 
-    return make_response(
-        'Could not verify', HTTPStatus.UNAUTHORIZED, {'WWW-Authenticate': 'Basic realm="Login required!"'}
-    )
+    return get_unauthorized_response()
 
 
 @jwt_required()
@@ -81,9 +81,14 @@ def change_password():
 
 @jwt_required()
 def login_history():
+    page = int(request.values.get('page'))
+    per_page = int(request.values.get('per_page'))
     identity = get_jwt_identity()
 
-    history = [{'user_agent': _.user_agent, 'auth_date': _.auth_date} for _ in get_login_hystory(identity)]
+    history = [
+        {'user_agent': _.user_agent, 'auth_date': _.auth_date}
+        for _ in get_login_hystory(identity, page, per_page).items
+    ]
     return jsonify(login_history=history)
 
 

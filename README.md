@@ -11,6 +11,12 @@
 
 ```
 docker-compose up
+
+docker-compose exec auth_api alembic revision -m "initial"
+
+docker-compose exec auth_api alembic revision --autogenerate
+
+docker-compose exec auth_api alembic upgrade head
 ```
 
 - Все миграции пройдут автоматически

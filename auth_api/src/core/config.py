@@ -1,9 +1,7 @@
 from datetime import timedelta
 from logging import config as logging_config
 from pydantic import BaseSettings, Field
-
 from src.core.logger import LOGGING
-
 
 # Применяем настройки логирования
 logging_config.dictConfig(LOGGING)
